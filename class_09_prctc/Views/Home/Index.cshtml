@@ -1,0 +1,109 @@
+﻿@using class_09_prctc;
+@model class_09_prctc.PaginatedList<class_09_prctc.Models.Employee>
+@{
+    ViewData["Title"] = "Index";
+    int cp = Model.PageIndex;
+    int tp = Model.TotalPage;
+    var next = Model.HasNextPage ? "" : "disabled";
+    var prev = Model.HasPreviousPage ? "" : "disabled";
+    int i = (cp - 1) * ViewBag.pSize + 1;
+}
+
+<div class="row">
+    <div class="col">
+        <h2 class="text-center">Employee List</h2>        
+        <div class="row">
+            <div class="col-3">
+                @if (ViewBag.count != null)
+                {
+                    <h5 class="text-primary ms-2">Total @ViewBag.count data found</h5>
+                }
+            </div>
+            <div class="col-9">
+                <form asp-controller="Home" asp-action="Index" method="post">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control me-2"name="usertext" placeholder="Search...."/>
+                        <button type="submit" class="btn btn-outline-primary btn-sm me-2">Search</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+      <table class=" table table-bordered table-striped table-sm">
+          <thead class="table-primary">
+                <tr>
+                    <th>
+                        Sl No
+                    </th>
+                    <th>
+                       Employee Name
+                        <a asp-action="Index" asp-controller="Home" asp-route-sortOrder="@ViewBag.sortParam" asp-route-usertext="@ViewBag.sword"><i class="fa fa-long-arrow-down"></i><i class="fa fa-long-arrow-up"></i></a>
+                    </th>
+                    <th>Employee Status</th>
+                    <th>
+                        Salary
+                        <a asp-action="Index" asp-controller="Home" asp-route-sortOrder="@ViewBag.sortSalary" asp-route-usertext="@ViewBag.sword"><i class="fa fa-long-arrow-down"></i><i class="fa fa-long-arrow-up"></i></a>
+                    </th>
+                    <th>Pay Basis</th>
+                    <th>Position Title</th>
+                </tr>
+
+            </thead>
+          <tbody>
+                @foreach(var item in Model)
+                {
+                    <tr>                                                                                    <td>@i</td>  
+                        <td>@Html.DisplayFor(x=>item.EmployeeName)</td>
+                        <td>@Html.DisplayFor(x=>item.EmployeeStatus)</td>
+                        <td>@Html.DisplayFor(x=>item.Salary)</td>
+                        <td>@Html.DisplayFor(x=>item.PayBasis)</td>
+                        <td>@Html.DisplayFor(x=>item.PositionTitle)</td>
+                    </tr>
+                    i++;
+                }
+            </tbody>
+      </table>
+        <ul class="pagination">
+            <li>
+                <a asp-action="Index" asp-controller="Home" asp-route-sortOrder="@ViewBag.sortParam" asp-route-usertext="@ViewBag.sword" asp-route-page="1" class="btn btn-primary">First</a>
+            </li>
+
+            <li class="page-item @prev">
+                <a asp-action="Index" asp-controller="Home" asp-route-sortOrder="@ViewBag.sortParam" asp-route-usertext="@ViewBag.sword" asp-route-page="@(cp-1)" class="btn btn-info">Prev</a>
+            </li>
+
+            @for (int k = 1; k <= Model.TotalPage; k++)
+            {
+                if (k >= cp - 5 && k <= cp + 5)
+                {
+                    if (k == cp)
+                    {
+                        <li class="page-item @(k==cp?"active":"")">
+                            <a asp-action="Index" asp-controller="Home" asp-route-sortOrder="@ViewBag.sortParam" asp-route-usertext="@ViewBag.sword" asp-route-page="@k" class="btn btn-warning">@k</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item @(k==cp?"active":"")">
+                            <a asp-action="Index" asp-controller="Home" asp-route-sortOrder="@ViewBag.sortParam" asp-route-usertext="@ViewBag.sword" asp-route-page="@k" class="btn btn-info">@k</a>
+                        </li>
+                    }
+       
+                }
+            }
+
+            <li class="page-item @next">
+                <a asp-action="Index" asp-controller="Home" asp-route-sortOrder="@ViewBag.sortParam" asp-route-usertext="@ViewBag.sword" asp-route-page="@(cp+1)" class="btn btn-info">Next</a>
+            </li>
+
+            <li>
+                <a asp-action="Index" asp-controller="Home" asp-route-sortOrder="@ViewBag.sortParam" asp-route-usertext="@ViewBag.sword" asp-route-page="@Model.TotalPage" class="btn btn-primary">Last</a>
+            </li>
+        </ul>
+
+
+
+    </div>
+
+</div>
+

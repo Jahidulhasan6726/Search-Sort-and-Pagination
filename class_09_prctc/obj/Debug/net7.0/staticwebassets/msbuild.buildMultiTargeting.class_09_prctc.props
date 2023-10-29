@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\class_09_prctc.props" />
+</Project>
